@@ -74,7 +74,7 @@ railway up
 | 3100 | Admin Dashboard     | Self-host admin panel      |
 | 3170 | Backend API         | GraphQL + REST API         |
 
-> **Note:** Set the Railway deploy port to `3000` in your service settings.
+> Set deploy port to `3000`.
 
 ---
 
@@ -230,11 +230,11 @@ This template is distributed under the **MIT License**. Hoppscotch itself is als
 
 ## 🤝 Contributing
 
-Found a bug or have a suggestion? [Open an issue](https://github.com/INAPP-Mobile/railway-hoppscotch/issues) or submit a PR.
+[Open an issue](https://github.com/INAPP-Mobile/railway-hoppscotch/issues) or submit a PR.
 
 ---
 
-## 📚 Resources
+## Resources
 
 - [Hoppscotch Documentation](https://docs.hoppscotch.io)
 - [Hoppscotch GitHub](https://github.com/hoppscotch/hoppscotch)
