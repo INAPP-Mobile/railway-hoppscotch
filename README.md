@@ -94,6 +94,7 @@ railway up
 | `DATABASE_URL`            | ✅ Yes   | PostgreSQL connection string (auto by Railway plugin)          |
 | `DATA_ENCRYPTION_KEY`     | ✅ Yes   | 32-char hex key. Generate: `openssl rand -hex 16`              |
 | `VITE_BASE_URL`           | ✅ Yes   | Your Railway deployment URL (e.g., `https://app.up.railway.app`)|
+| `PORT`                    | ⬜ No    | Deploy port (Railway auto-sets to `3000`)                      |
 | `WHITELISTED_ORIGINS`     | ⬜ No    | Comma-separated CORS origins. Include your Railway URL.        |
 | `SECRET_KEY`              | ⬜ No    | JWT signing secret. Generate: `openssl rand -base64 32`        |
 | `TRUST_PROXY`             | ⬜ No    | Set `true` when behind Railway proxy                           |
