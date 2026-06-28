@@ -10,6 +10,54 @@
 
 ---
 
+# Deploy and Host
+
+Deploy Hoppscotch on Railway in one click. This template provisions a container running the Hoppscotch all-in-one image (Caddy reverse proxy, NestJS backend, and webapp frontend) with an attached PostgreSQL database. SSL is handled automatically by Railway.
+
+## About Hosting
+
+This template runs Hoppscotch v2026.5.0 inside a single Railway container with three internal services:
+
+- **Caddy** serves the frontend SPA on port 3000, admin dashboard on port 3100, and reverse-proxies API requests to the backend on port 3170
+- **NestJS Backend** provides REST + GraphQL APIs on port 8080 (internal)
+- **Webapp Server** serves the built frontend assets
+
+PostgreSQL is provisioned as a Railway plugin — no manual database setup required.
+
+## Why Deploy
+
+Hoppscotch is the leading open-source Postman alternative with 79.7K GitHub stars. Self-hosting gives you full control over your API development data, no third-party dependency, and unlimited team collaboration without per-seat pricing. Railway's one-click deploy makes it accessible to any team in under a minute.
+
+## Common Use Cases
+
+- **API Development & Testing** — REST, GraphQL, WebSocket, Socket.IO, SSE, MQTT
+- **Team Collaboration** — Share collections and environments with your team
+- **API Documentation** — Auto-generate and publish API docs
+- **Postman Migration** — Import existing Postman collections seamlessly
+- **CI/CD Integration** — Use Hoppscotch as part of your API testing pipeline
+
+## Dependencies for Hoppscotch
+
+### Runtime
+
+| Dependency    | Version/Type | Purpose                                 |
+|---------------|--------------|-----------------------------------------|
+| Node.js       | 20+          | Application runtime                     |
+| Caddy         | 2.x          | Reverse proxy and static file serving   |
+| PostgreSQL    | 15+          | Primary database (via Railway plugin)   |
+| Prisma        | —            | ORM and database migrations             |
+| NestJS        | —            | Backend framework                       |
+
+### Deployment Dependencies
+
+| Tool              | Purpose                                         |
+|-------------------|-------------------------------------------------|
+| Docker            | Container runtime (managed by Railway)          |
+| Railway           | Hosting platform                                |
+| Railway PostgreSQL | Managed PostgreSQL database                    |
+
+---
+
 ## ✨ Features
 
 - **Request Composer** — REST, GraphQL, WebSocket, SSE, Socket.IO, MQTT
@@ -32,37 +80,45 @@
 ### Manual Deploy
 
 ```bash
-# Clone the template
 git clone https://github.com/INAPP-Mobile/railway-hoppscotch.git
 cd railway-hoppscotch
-
-# Deploy to Railway
 railway up
 ```
 
 ---
 
-## 🧩 Architecture
+## ⚙️ Environment Variables
+
+| Variable                  | Required | Description                                                    |
+|---------------------------|----------|----------------------------------------------------------------|
+| `DATABASE_URL`            | ✅ Yes   | PostgreSQL connection string (auto by Railway plugin)          |
+| `DATA_ENCRYPTION_KEY`     | ✅ Yes   | 32-char hex key. Generate: `openssl rand -hex 16`              |
+| `VITE_BASE_URL`           | ✅ Yes   | Your Railway deployment URL (e.g., `https://app.up.railway.app`)|
+| `WHITELISTED_ORIGINS`     | ⬜ No    | Comma-separated CORS origins. Include your Railway URL.        |
+| `SECRET_KEY`              | ⬜ No    | JWT signing secret. Generate: `openssl rand -base64 32`        |
+| `TRUST_PROXY`             | ⬜ No    | Set `true` when behind Railway proxy                           |
+
+### Quick Setup
+
+```bash
+railway add postgres
+openssl rand -hex 16  # → set as DATA_ENCRYPTION_KEY
+```
+
+---
+
+## 🛠️ Architecture
 
 ```
 ┌─────────────────────────────────────────────────────┐
-│                   Railway Container                  │
-│                                                      │
-│  ┌──────────┐   :3000   ┌────────────────────────┐  │
-│  │  Caddy   │◄─────────►│   Self-Host Webapp     │  │
-│  │  Reverse │           │   (Frontend SPA)        │  │
-│  │  Proxy   │◄─────────►│                        │  │
-│  │          │   :3100   │   Admin Dashboard       │  │
-│  │          │           │   (Admin SPA)           │  │
-│  │          │◄─────────►│                        │  │
-│  │          │   :3170   │   Backend API           │  │
-│  │          │           │   (NestJS + GraphQL)    │  │
-│  └──────────┘           └───────────┬────────────┘  │
-│                                     │                │
-│                           ┌─────────▼──────────┐    │
-│                           │  PostgreSQL         │    │
-│                           │  (Railway Plugin)   │    │
-│                           └────────────────────┘    │
+│  Caddy (:3000 frontend / :3100 admin / :3170 API)   │
+│        ├── Self-Host Webapp (Frontend SPA)           │
+│        ├── Admin Dashboard SPA                       │
+│        └── Backend API (NestJS + GraphQL, :8080)    │
+│                     │                                │
+│              ┌──────▼──────┐                         │
+│              │ PostgreSQL  │                         │
+│              └─────────────┘                         │
 └─────────────────────────────────────────────────────┘
 ```
 
@@ -74,165 +130,33 @@ railway up
 | 3100 | Admin Dashboard     | Self-host admin panel      |
 | 3170 | Backend API         | GraphQL + REST API         |
 
-> Set deploy port to `3000`.
-
----
-
-## ⚙️ Environment Variables
-
-| Variable                  | Required | Default                                                | Description                                                     |
-|---------------------------|----------|--------------------------------------------------------|-----------------------------------------------------------------|
-| `DATABASE_URL`            | ✅ Yes   | —                                                      | PostgreSQL connection string (auto-provided by Railway plugin)  |
-| `DATA_ENCRYPTION_KEY`     | ✅ Yes   | —                                                      | 32-char encryption key for DB secrets. Generate: `openssl rand -hex 16` |
-| `WHITELISTED_ORIGINS`     | ⬜ No    | `http://localhost:3170,http://localhost:3000,…`         | Comma-separated CORS origins. Include your Railway URL.         |
-| `SECRET_KEY`              | ⬜ No    | Auto-generated on first boot                           | JWT signing secret. Generate: `openssl rand -base64 32`         |
-| `PROXY_APP_URL`           | ⬜ No    | `https://proxy.hoppscotch.io`                          | Default proxy URL for proxied requests                          |
-| `TRUST_PROXY`             | ⬜ No    | `false`                                                | Set `true` when behind Railway proxy                             |
-| `ENABLE_SUBPATH_BASED_ACCESS` | ⬜ No | `false`                                               | Serve all services on a single port with path-based routing     |
-| `INFRA_TOKEN`             | ⬜ No    | —                                                      | Admin API access token                                          |
-
-### Required Add-ons
-
-This template requires a **PostgreSQL database**. Add it from the Railway dashboard or CLI:
-
-```bash
-railway add postgres
-```
-
-The `DATABASE_URL` variable is automatically injected into your service. No manual configuration needed.
-
-### Quick Setup
-
-```bash
-# 1. Add a PostgreSQL database
-railway add postgres
-
-# 2. Generate a secure encryption key
-openssl rand -hex 16
-
-# 3. Set the key in Railway
-railway variables set DATA_ENCRYPTION_KEY=$(openssl rand -hex 16)
-```
-
----
-
-## 🛠️ How It Works
-
-### Dockerfile
-
-The template uses the official `hoppscotch/hoppscotch:2026.5.0` image with a lightweight wrapper that:
-
-1. **Runs Prisma migrations** against your PostgreSQL database on container startup
-2. **Starts** the Hoppscotch all-in-one process (Caddy + Backend + Webapp)
-
-This ensures the database schema is always up to date without manual intervention.
-
-### Database
-
-Hoppscotch uses **PostgreSQL** via Prisma ORM. The template does **not** support SQLite. A PostgreSQL add-on is required on Railway.
-
 ---
 
 ## 🔐 Security
 
-- **No hardcoded secrets** — all credentials are passed via environment variables
-- **Pinned version** — uses `hoppscotch/hoppscotch:2026.5.0` (not `:latest`)
+- **No hardcoded secrets** — all credentials via environment variables
+- **Pinned version** — `hoppscotch/hoppscotch:2026.5.0` (not `:latest`)
 - **Encryption at rest** — sensitive data encrypted with `DATA_ENCRYPTION_KEY`
 - **CORS configurable** — restrict origins via `WHITELISTED_ORIGINS`
-- **Non-root** — the container runs as a non-privileged user
+- **Non-root** — container runs as non-privileged user
 
 ---
 
 ## 🧪 Troubleshooting
 
-| Problem                          | Likely Cause                           | Solution                                                           |
-|----------------------------------|----------------------------------------|--------------------------------------------------------------------|
-| `ECONNREFUSED` on startup        | PostgreSQL not ready                   | Ensure Railway PostgreSQL add-on is added and `DATABASE_URL` is set |
-| Prisma migration fails           | Database credentials wrong             | Check `DATABASE_URL` format                                        |
-| CORS errors in browser           | `WHITELISTED_ORIGINS` missing your URL | Add your Railway domain to the variable                            |
-| 502 Bad Gateway                  | Backend not ready after DB migration   | Wait 30–60s; check logs for migration status                       |
-| `1146: Table doesn't exist`      | Migration incomplete                   | Restart the service to trigger auto-migration                       |
-| Login/register redirects to wrong URL | `VITE_BASE_URL` not set correctly   | Set `VITE_BASE_URL` to your Railway URL                            |
-| Slow first load                  | Cold start, DB connection              | Normal for free tier. Upgrade for better performance.              |
-
-### Logs
-
-View container logs in the Railway dashboard under **Deployments** → **View Logs**:
-
-```
-==> Running database migrations...
-...
-1 migration found, applying...
-==> Migrations complete.
-==> Starting Hoppscotch...
-Running in production: true
-Backend Server | Port: 8080
-```
-
-### Health Check
-
-The container exposes a health endpoint. Railway will automatically restart the container if it becomes unresponsive.
-
----
-
-## 👥 Usage
-
-### First Login
-
-1. Navigate to your Railway deployment URL
-2. Click **Sign Up** to create an admin account
-3. Configure your team, collections, and environment variables
-4. Start making API requests
-
-### Admin Dashboard
-
-Access the admin dashboard at `https://your-app.up.railway.app:3100`:
-- Manage users and permissions
-- View API tokens
-- Monitor usage statistics
-
-### Import from Postman
-
-1. Export your Postman collection as JSON
-2. In Hoppscotch, go to **Collections** → **Import**
-3. Select your Postman JSON file
-4. All your requests, headers, and variables are imported
-
----
-
-## 📦 Dependencies
-
-### Runtime
-
-| Dependency    | Version/Type | Purpose                                 |
-|---------------|--------------|-----------------------------------------|
-| Node.js       | 20+          | Application runtime                     |
-| Caddy         | 2.x          | Reverse proxy and static file serving   |
-| PostgreSQL    | 15+          | Primary database (via Railway plugin)   |
-| Prisma        | —            | ORM and database migrations             |
-| NestJS        | —            | Backend framework                       |
-
-### Deployment
-
-| Tool          | Purpose                                         |
-|---------------|-------------------------------------------------|
-| Docker        | Container runtime (managed by Railway)          |
-| Railway       | Hosting platform                                |
-| Railway PostgreSQL | Managed PostgreSQL database               |
+| Problem                          | Likely Cause                         | Solution                                      |
+|----------------------------------|--------------------------------------|-----------------------------------------------|
+| `ECONNREFUSED` on startup        | PostgreSQL not ready                 | Add Railway PostgreSQL and check DATABASE_URL |
+| Prisma migration fails           | Wrong database credentials           | Check DATABASE_URL format                     |
+| CORS errors in browser           | WHITELISTED_ORIGINS missing your URL | Add your Railway domain                       |
+| 502 Bad Gateway                  | Backend not ready after migration    | Wait 30-60s; check logs                       |
+| Login redirects to wrong URL     | VITE_BASE_URL not set correctly      | Set to your Railway URL                       |
 
 ---
 
 ## 📄 License
 
 This template is distributed under the **MIT License**. Hoppscotch itself is also MIT-licensed.
-
----
-
-## 🤝 Contributing
-
-[Open an issue](https://github.com/INAPP-Mobile/railway-hoppscotch/issues) or submit a PR.
-
----
 
 ## Resources
 
