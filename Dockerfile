@@ -19,4 +19,9 @@ RUN chmod +x /docker-entrypoint.sh
 #   Railway health-checks whichever port you set in PORT.
 EXPOSE 3000 3100 3170
 
+# Default runtime configuration
+ENV PRODUCTION=true
+ENV PORT=3000
+ENV WHITELISTED_ORIGINS=
+
 ENTRYPOINT ["/docker-entrypoint.sh"]
