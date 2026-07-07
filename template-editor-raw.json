@@ -1,22 +1,22 @@
-[
-  {
+{
+  "DATABASE_URL": {
     "value": "${{Postgres.DATABASE_URL}}",
     "description": "PostgreSQL connection string. Add a Railway Postgres service to auto-inject."
   },
-  {
+  "DATA_ENCRYPTION_KEY": {
     "value": "${{secret(32)}}",
     "description": "Encryption key for sensitive data stored in the database (32 characters). Auto-generated."
   },
-  {
+  "VITE_BASE_URL": {
     "value": "",
     "description": "Public URL of your deployment (e.g., https://your-app.up.railway.app). Required for cookies and callbacks."
   },
-  {
+  "SECRET_KEY": {
     "value": "${{secret(32)}}",
     "description": "Secret key for signing JWT tokens. Auto-generated."
   },
-  {
+  "WHITELISTED_ORIGINS": {
     "value": "",
     "description": "Comma-separated allowed CORS origins. Include your Railway public URL."
   }
-]
+}

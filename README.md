@@ -2,7 +2,7 @@
 
 > **Self-hosted API development platform.** Open-source Postman alternative with GraphQL, REST, WebSocket, SSE, Socket.IO, and MQTT support.
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.com/deploy/railway-hoppscotch)
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.com/new/template/railway-hoppscotch)
 
 [![GitHub Repo](https://img.shields.io/badge/GitHub-INAPP--Mobile%2Frailway--hoppscotch-181717?style=flat-square&logo=github)](https://github.com/INAPP-Mobile/railway-hoppscotch)
 [![Hoppscotch](https://img.shields.io/badge/Hoppscotch-79.7K%E2%98%85-3ab795?style=flat-square)](https://github.com/hoppscotch/hoppscotch)
@@ -75,7 +75,7 @@ Hoppscotch is the leading open-source Postman alternative with 79.7K GitHub star
 
 ### One-click Deploy
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.com/deploy/railway-hoppscotch)
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.com/new/template/railway-hoppscotch)
 
 ### Manual Deploy
 
