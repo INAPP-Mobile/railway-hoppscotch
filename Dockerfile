@@ -21,7 +21,8 @@ EXPOSE 3000 3100 3170
 
 # Default runtime configuration
 ENV PRODUCTION=true
-ENV PORT=3000
+# DO NOT set PORT in the image; docker-entrypoint.sh sets PORT=8080 for
+# the NestJS backend. Caddy binds :3000 from its own Caddyfile config.
 ENV HOPP_AIO_ALTERNATE_PORT=3000
 ENV WHITELISTED_ORIGINS=
 
