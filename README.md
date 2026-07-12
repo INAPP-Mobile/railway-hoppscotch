@@ -18,7 +18,7 @@ Deploy Hoppscotch on Railway in one click. This template provisions a container 
 
 This template runs Hoppscotch v2026.5.0 inside a single Railway container with three internal services:
 
-- **Caddy** serves the frontend SPA on port 3000, admin dashboard on port 3100, and reverse-proxies API requests to the backend on port 3170
+- **Caddy** serves the frontend SPA on port 3000, admin dashboard on port 3100, and reverse-proxies API requests to the backend on port 8080 (internal)
 - **NestJS Backend** provides REST + GraphQL APIs on port 8080 (internal)
 - **Webapp Server** serves the built frontend assets
 
@@ -114,10 +114,10 @@ railway up
 
 ```
 ┌─────────────────────────────────────────────────────┐
-│  Caddy (:3000 frontend / :3100 admin / :3170 API)   │
+│  Caddy (:3000 frontend / :3100 admin / :3170 proxy → :8080 API) │
 │        ├── Self-Host Webapp (Frontend SPA)           │
 │        ├── Admin Dashboard SPA                       │
-│        └── Backend API (NestJS + GraphQL, :8080)    │
+│        └── Backend API (NestJS + GraphQL, :8080 internal)    │
 │                     │                                │
 │              ┌──────▼──────┐                         │
 │              │ PostgreSQL  │                         │
@@ -129,9 +129,9 @@ railway up
 
 | Port | Service             | Description                |
 |------|---------------------|----------------------------|
-| 3000 | Webapp (Frontend)   | Main Hoppscotch UI         |
+| 3000 | Caddy (public)     | Frontend + admin + API proxy |
 | 3100 | Admin Dashboard     | Self-host admin panel      |
-| 3170 | Backend API         | GraphQL + REST API         |
+| 8080 | Backend API (internal) | NestJS GraphQL + REST API |
 
 ---
 
