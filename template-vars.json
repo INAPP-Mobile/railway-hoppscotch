@@ -1,7 +1,7 @@
 {
   "DATABASE_URL": {
-    "defaultValue": "${{Postgres.DATABASE_URL}}",
-    "description": "PostgreSQL connection string. Add a Railway Postgres service to auto-inject.",
+    "defaultValue": "postgresql://postgres:hoppscotch2026@postgres.railway.internal:5432/hoppscotch",
+    "description": "PostgreSQL connection string. Connected to the postgres sibling service.",
     "isOptional": false
   },
   "DATA_ENCRYPTION_KEY": {
@@ -10,7 +10,7 @@
     "isOptional": false
   },
   "VITE_BASE_URL": {
-    "defaultValue": "",
+    "defaultValue": "https://${{RAILWAY_PUBLIC_DOMAIN}}",
     "description": "Public URL of your deployment (e.g., https://your-app.up.railway.app). Required for cookies and callbacks.",
     "isOptional": false
   },
@@ -19,9 +19,59 @@
     "description": "Secret key for signing JWT tokens. Auto-generated.",
     "isOptional": true
   },
-  "WHITELISTED_ORIGINS": {
+  "MAILER_SMTP_URL": {
     "defaultValue": "",
+    "description": "SMTP connection URL for email sending (e.g., smtp://user:pass@smtp.example.com:587). Required for admin onboarding.",
+    "isOptional": false
+  },
+  "VITE_ALLOWED_AUTH_PROVIDERS": {
+    "defaultValue": "EMAIL,GOOGLE,GITHUB,MICROSOFT",
+    "description": "Comma-separated list of enabled auth providers. Required for admin sign-up.",
+    "isOptional": false
+  },
+  "WHITELISTED_ORIGINS": {
+    "defaultValue": "https://${{RAILWAY_PUBLIC_DOMAIN}}",
     "description": "Comma-separated allowed CORS origins. Include your Railway public URL.",
     "isOptional": true
+  },
+  "ENABLE_SUBPATH_BASED_ACCESS": {
+    "defaultValue": "true",
+    "description": "Serves frontend, admin, and backend API on a single port via subpaths (required for Railway proxy).",
+    "isOptional": false
+  },
+  "INFRA_TOKEN": {
+    "defaultValue": "${{secret(16)}}",
+    "description": "Secret token for admin dashboard API access. Auto-generated.",
+    "isOptional": false
+  },
+  "PORT": {
+    "defaultValue": "3000",
+    "description": "Port Caddy uses to serve the app. MUST be 3000.",
+    "isOptional": false
+  },
+  "HOPP_AIO_ALTERNATE_PORT": {
+    "defaultValue": "3000",
+    "description": "Alternate port for Caddy subpath mode. MUST be 3000.",
+    "isOptional": false
+  },
+  "VITE_BACKEND_GQL_URL": {
+    "defaultValue": "https://${{RAILWAY_PUBLIC_DOMAIN}}/backend/graphql",
+    "description": "Backend GraphQL URL for subpath access.",
+    "isOptional": false
+  },
+  "VITE_BACKEND_WS_URL": {
+    "defaultValue": "wss://${{RAILWAY_PUBLIC_DOMAIN}}/backend/graphql",
+    "description": "Backend Websocket URL for subpath access.",
+    "isOptional": false
+  },
+  "VITE_BACKEND_API_URL": {
+    "defaultValue": "https://${{RAILWAY_PUBLIC_DOMAIN}}/backend/v1",
+    "description": "Backend API URL for subpath access.",
+    "isOptional": false
+  },
+  "VITE_ADMIN_URL": {
+    "defaultValue": "https://${{RAILWAY_PUBLIC_DOMAIN}}/admin",
+    "description": "Admin URL for subpath access.",
+    "isOptional": false
   }
 }

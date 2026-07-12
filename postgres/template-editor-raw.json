@@ -1,0 +1,18 @@
+{
+  "POSTGRES_USER": {
+    "value": "postgres",
+    "description": "Superuser"
+  },
+  "POSTGRES_PASSWORD": {
+    "value": "hoppscotch2026",
+    "description": "Superuser password"
+  },
+  "POSTGRES_DB": {
+    "value": "hoppscotch",
+    "description": "Default database"
+  },
+  "PGDATA": {
+    "value": "/var/lib/postgresql/data",
+    "description": "Data directory. Parent /var/lib/postgresql must be mounted as a volume to avoid lost+found crash."
+  }
+}

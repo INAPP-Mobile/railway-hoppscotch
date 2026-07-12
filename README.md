@@ -2,7 +2,7 @@
 
 > **Self-hosted API development platform.** Open-source Postman alternative with GraphQL, REST, WebSocket, SSE, Socket.IO, and MQTT support.
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.com/new/template/railway-hoppscotch)
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.com/new/template/hoppscotch)
 
 [![GitHub Repo](https://img.shields.io/badge/GitHub-INAPP--Mobile%2Frailway--hoppscotch-181717?style=flat-square&logo=github)](https://github.com/INAPP-Mobile/railway-hoppscotch)
 [![Hoppscotch](https://img.shields.io/badge/Hoppscotch-79.7K%E2%98%85-3ab795?style=flat-square)](https://github.com/hoppscotch/hoppscotch)
@@ -22,7 +22,7 @@ This template runs Hoppscotch v2026.5.0 inside a single Railway container with t
 - **NestJS Backend** provides REST + GraphQL APIs on port 8080 (internal)
 - **Webapp Server** serves the built frontend assets
 
-PostgreSQL is provisioned as a Railway plugin — no manual database setup required.
+PostgreSQL is provisioned as a sibling Postgres service — credentials are pre-configured in the deploy form.
 
 ## Why Deploy
 
@@ -44,7 +44,7 @@ Hoppscotch is the leading open-source Postman alternative with 79.7K GitHub star
 |---------------|--------------|-----------------------------------------|
 | Node.js       | 20+          | Application runtime                     |
 | Caddy         | 2.x          | Reverse proxy and static file serving   |
-| PostgreSQL    | 15+          | Primary database (via Railway plugin)   |
+| PostgreSQL    | 15+          | Primary database (sibling Postgres service)   |
 | Prisma        | —            | ORM and database migrations             |
 | NestJS        | —            | Backend framework                       |
 
@@ -54,7 +54,7 @@ Hoppscotch is the leading open-source Postman alternative with 79.7K GitHub star
 |-------------------|-------------------------------------------------|
 | Docker            | Container runtime (managed by Railway)          |
 | Railway           | Hosting platform                                |
-| Railway PostgreSQL | Managed PostgreSQL database                    |
+| Railway PostgreSQL | Managed PostgreSQL database (sibling service)  |
 
 ---
 
@@ -75,13 +75,13 @@ Hoppscotch is the leading open-source Postman alternative with 79.7K GitHub star
 
 ### One-click Deploy
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.com/new/template/railway-hoppscotch)
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.com/new/template/hoppscotch)
 
 ### Manual Deploy
 
 ```bash
 git clone https://github.com/INAPP-Mobile/railway-hoppscotch.git
-cd railway-hoppscotch
+cd hoppscotch
 railway up
 ```
 
@@ -91,20 +91,14 @@ railway up
 
 | Variable                  | Required | Description                                                    |
 |---------------------------|----------|----------------------------------------------------------------|
-| `DATABASE_URL`            | ✅ Yes   | PostgreSQL connection string (auto by Railway plugin)          |
+| `DATABASE_URL`            | ✅ Yes   | PostgreSQL connection string (pre-configured for sibling Postgres service)          |
 | `DATA_ENCRYPTION_KEY`     | ✅ Yes   | 32-char hex key. Generate: `openssl rand -hex 16`              |
 | `VITE_BASE_URL`           | ✅ Yes   | Your Railway deployment URL (e.g., `https://app.up.railway.app`)|
+| `MAILER_SMTP_URL`         | ✅ Yes   | SMTP connection URL for email sending. Required for admin onboarding. |
 | `PORT`                    | ⬜ No    | Deploy port (Railway auto-sets to `3000`)                      |
 | `WHITELISTED_ORIGINS`     | ⬜ No    | Comma-separated CORS origins. Include your Railway URL.        |
 | `SECRET_KEY`              | ⬜ No    | JWT signing secret. Generate: `openssl rand -base64 32`        |
-| `TRUST_PROXY`             | ⬜ No    | Set `true` when behind Railway proxy                           |
 
-### Quick Setup
-
-```bash
-railway add postgres
-openssl rand -hex 16  # → set as DATA_ENCRYPTION_KEY
-```
 
 ---
 
@@ -135,7 +129,7 @@ openssl rand -hex 16  # → set as DATA_ENCRYPTION_KEY
 
 ## 🔐 Security
 
-- **No hardcoded secrets** — all credentials via environment variables
+- **Pre-configured credentials** — database password set in deploy form, encryption key auto-generated
 - **Pinned version** — `hoppscotch/hoppscotch:2026.5.0` (not `:latest`)
 - **Encryption at rest** — sensitive data encrypted with `DATA_ENCRYPTION_KEY`
 - **CORS configurable** — restrict origins via `WHITELISTED_ORIGINS`
@@ -147,7 +141,7 @@ openssl rand -hex 16  # → set as DATA_ENCRYPTION_KEY
 
 | Problem                          | Likely Cause                         | Solution                                      |
 |----------------------------------|--------------------------------------|-----------------------------------------------|
-| `ECONNREFUSED` on startup        | PostgreSQL not ready                 | Add Railway PostgreSQL and check DATABASE_URL |
+| `ECONNREFUSED` on startup        | PostgreSQL not ready                 | Check DATABASE_URL is correct |
 | Prisma migration fails           | Wrong database credentials           | Check DATABASE_URL format                     |
 | CORS errors in browser           | WHITELISTED_ORIGINS missing your URL | Add your Railway domain                       |
 | 502 Bad Gateway                  | Backend not ready after migration    | Wait 30-60s; check logs                       |
