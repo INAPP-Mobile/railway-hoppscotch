@@ -16,8 +16,8 @@
     "description": "Secret key for signing JWT tokens. Auto-generated."
   },
   "MAILER_SMTP_URL": {
-    "value": "",
-    "description": "SMTP connection URL for email sending (e.g., smtp://user:pass@smtp.example.com:587). Required for admin onboarding."
+    "value": "smtp://user:pass@smtp.example.com:587",
+    "description": "SMTP connection URL for email sending. REQUIRED for admin onboarding to succeed — replace with your real SMTP after deploy. Empty value causes backend to exit immediately."
   },
   "VITE_ALLOWED_AUTH_PROVIDERS": {
     "value": "EMAIL,GOOGLE,GITHUB,MICROSOFT",

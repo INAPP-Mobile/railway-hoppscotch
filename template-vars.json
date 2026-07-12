@@ -20,8 +20,8 @@
     "isOptional": true
   },
   "MAILER_SMTP_URL": {
-    "defaultValue": "",
-    "description": "SMTP connection URL for email sending (e.g., smtp://user:pass@smtp.example.com:587). Required for admin onboarding.",
+    "defaultValue": "smtp://user:pass@smtp.example.com:587",
+    "description": "SMTP connection URL for email sending. REQUIRED for admin onboarding to succeed — replace with your real SMTP credentials after deploy. An empty value causes the backend to exit immediately.",
     "isOptional": false
   },
   "VITE_ALLOWED_AUTH_PROVIDERS": {
