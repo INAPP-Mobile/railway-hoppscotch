@@ -21,10 +21,12 @@ else
 fi
 
 echo "==> Starting Hoppscotch..."
-# NOTE: Do NOT override PORT here. The upstream aio_run.mjs supervises
-# Caddy (:3000) + Admin (:3100) + Backend (:8080 internal) as children.
-# Railway health-checks the container's PORT (3000 from template), which Caddy
-# binds to. The NestJS backend listens on 8080 internally regardless.
-# Forcing PORT=8080 previously broke Caddy's bind and caused the
-# supervisor to exit cleanly after onboarding -> 502 on all routes.
+# The upstream aio_run.mjs supervises Caddy (:3000) + Admin (:3100) + Backend
+# as children. Caddy binds :3000 (Railway health-check port, from the template
+# PORT=3000) using its OWN Caddyfile config — NOT the PORT env var.
+# The NestJS Backend reads PORT and binds to it directly. We must set PORT=8080
+# so the backend listens on its internal port (Caddy reverse-proxies :3170 ->
+# localhost:8080). If PORT=3000 reaches the backend, it collides with Caddy on
+# :3000 -> EADDRINUSE -> crash (seen on template deploy 537aaac9).
+export PORT=8080
 exec tini -- node /usr/src/app/aio_run.mjs
