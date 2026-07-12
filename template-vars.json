@@ -45,8 +45,8 @@
     "isOptional": false
   },
   "PORT": {
-    "defaultValue": "8080",
-    "description": "Port the NestJS backend listens on. Railway injects this; the backend binds it directly. Caddy (on 3000) reverse-proxies to it. MUST be 8080 to avoid EADDRINUSE with Caddy.",
+    "defaultValue": "3000",
+    "description": "Public port Caddy listens on. Railway exposes this. The backend uses 8080 internally via the entrypoint (export PORT=8080), so Caddy and backend never collide.",
     "isOptional": false
   },
   "HOPP_AIO_ALTERNATE_PORT": {
