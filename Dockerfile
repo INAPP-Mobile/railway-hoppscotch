@@ -1,4 +1,4 @@
-FROM docker.io/hoppscotch/hoppscotch:2026.7.0
+FROM docker.io/hoppscotch/hoppscotch:2026.9.0
 
 # ── Metadata ──────────────────────────────────────────────────────────────
 LABEL org.opencontainers.image.source="https://github.com/INAPP-Mobile/railway-hoppscotch"
