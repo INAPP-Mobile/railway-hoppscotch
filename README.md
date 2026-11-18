@@ -100,10 +100,10 @@ railway up
 | `INFRA_TOKEN`                           | ✅ Yes   | Secret token for admin dashboard API. Auto-generated (`${{secret(16)}}`).         |
 | `PORT`                                 | ✅ Yes   | Public port Caddy listens on. Railway exposes this (`3000`). Backend uses `8080` internally via entrypoint. |
 | `HOPP_AIO_ALTERNATE_PORT`             | ✅ Yes   | Caddy frontend port. Must be `3000`.                                         |
-| `VITE_BACKEND_GQL_URL`                 | ✅ Yes   | Backend GraphQL URL (`https://<domain>/backend/graphql`).                        |
-| `VITE_BACKEND_WS_URL`                  | ✅ Yes   | Backend WebSocket URL (`wss://<domain>/backend/graphql`).                      |
-| `VITE_BACKEND_API_URL`                  | ✅ Yes   | Backend API URL (`https://<domain>/backend/v1`).                            |
-| `VITE_ADMIN_URL`                        | ✅ Yes   | Admin URL (`https://<domain>/admin`).                                          |
+| `VITE_BACKEND_GQL_URL`                 | ✅ Yes   | Backend GraphQL URL (`https://{domain}/backend/graphql`).                        |
+| `VITE_BACKEND_WS_URL`                  | ✅ Yes   | Backend WebSocket URL (`wss://{domain}/backend/graphql`).                      |
+| `VITE_BACKEND_API_URL`                  | ✅ Yes   | Backend API URL (`https://{domain}/backend/v1`).                            |
+| `VITE_ADMIN_URL`                        | ✅ Yes   | Admin URL (`https://{domain}/admin`).                                          |
 | `WHITELISTED_ORIGINS`                | ⚠️ No    | Comma-separated CORS origins. Include your Railway URL.                           |
 | `SECRET_KEY`                           | ⚠️ No    | JWT signing secret. Auto-generated (`${{secret(32)}}`).                         |
 
